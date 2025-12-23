@@ -1,5 +1,7 @@
-//  wheel  rotaion logic 
 import { useRef } from "react";
+import { playSound } from "../utils/sound";
+import clickSound from "../assets/sounds/click.mp3";
+import wheelSound from "../assets/sounds/wheel.mp3";
 
 export default function useWheel({
   onUp,
@@ -20,10 +22,12 @@ export default function useWheel({
 
     const diff = e.clientY - lastY.current;
 
-    if (diff > 15) {
+    if (diff > 18) {
+      playSound(wheelSound, 0.2);
       onDown?.();
       lastY.current = e.clientY;
-    } else if (diff < -15) {
+    } else if (diff < -18) {
+      playSound(wheelSound, 0.2);
       onUp?.();
       lastY.current = e.clientY;
     }
@@ -37,9 +41,21 @@ export default function useWheel({
     onPointerDown,
     onPointerMove,
     onPointerUp,
-    onSelect,
-    onBack,
-    onNext,
-    onPrev,
+    onSelect: () => {
+      playSound(clickSound);
+      onSelect?.();
+    },
+    onBack: () => {
+      playSound(clickSound);
+      onBack?.();
+    },
+    onNext: () => {
+      playSound(clickSound);
+      onNext?.();
+    },
+    onPrev: () => {
+      playSound(clickSound);
+      onPrev?.();
+    },
   };
 }

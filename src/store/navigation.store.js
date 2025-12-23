@@ -1,22 +1,32 @@
-import { create } from "zustand";
+import { useState } from "react";
 
-export const useNavigationStore = create((set) => ({
-  screen: "MENU",
-  menuIndex: 0,
-  history: [],
+export default function useNavigation(menuItems) {
+  const [screen, setScreen] = useState("locked");
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  setMenuIndex: (fn) =>
-    set((s) => ({ menuIndex: fn(s.menuIndex) })),
+  const up = () =>
+    setActiveIndex((i) => (i > 0 ? i - 1 : menuItems.length - 1));
 
-  goTo: (screen) =>
-    set((s) => ({
-      history: [...s.history, s.screen],
-      screen,
-    })),
+  const down = () =>
+    setActiveIndex((i) => (i + 1) % menuItems.length);
 
-  goBack: () =>
-    set((s) => ({
-      screen: s.history.pop() || "MENU",
-      history: [...s.history],
-    })),
-}));
+  const select = () => {
+    if (screen === "home") {
+      setScreen(menuItems[activeIndex].toLowerCase());
+    }
+  };
+
+  const back = () => {
+    if (screen !== "home") setScreen("home");
+  };
+
+  return {
+    screen,
+    setScreen,
+    activeIndex,
+    up,
+    down,
+    select,
+    back,
+  };
+}

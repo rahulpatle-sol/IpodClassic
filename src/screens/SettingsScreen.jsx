@@ -1,20 +1,22 @@
-import ListItem from "../components/ipod/ListItem";
-
-const SETTINGS = [
-  "Theme",
-  "About",
-  "Reset Library",
-];
+import { useTheme } from "../store/theme.store";
 
 export default function SettingsScreen() {
+  const { theme, setTheme } = useTheme();
+
+  const themes = ["classic", "dark", "modern"];
+
   return (
-    <div className="p-1">
-      {SETTINGS.map((item, index) => (
-        <ListItem
-          key={item}
-          text={item}
-          selected={index === 0}
-        />
+    <div className="p-3 space-y-2">
+      {themes.map((t) => (
+        <div
+          key={t}
+          onClick={() => setTheme(t)}
+          className={`p-2 rounded cursor-pointer ${
+            theme === t ? "bg-blue-600 text-white" : ""
+          }`}
+        >
+          {t.toUpperCase()}
+        </div>
       ))}
     </div>
   );

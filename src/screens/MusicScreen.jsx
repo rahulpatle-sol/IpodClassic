@@ -1,17 +1,24 @@
-import { useState } from "react";
-import ListItem from "../components/ipod/ListItem";
+const MUSIC_MENU = [
+  "All Songs",
+  "Artists",
+  "Albums",
+  "Playlists",
+];
 
-export default function MusicScreen({ songs = [] }) {
-  const [selected, setSelected] = useState(0);
-
+export default function MusicMenuScreen({ nav }) {
   return (
-    <div className="p-1">
-      {songs.map((song, index) => (
-        <ListItem
-          key={song.id}
-          text={song.title}
-          selected={index === selected}
-        />
+    <div className="bg-neutral-100 h-full p-2">
+      {MUSIC_MENU.map((item, i) => (
+        <div
+          key={item}
+          className={`p-2 rounded ${
+            i === nav.activeIndex
+              ? "bg-blue-600 text-white"
+              : ""
+          }`}
+        >
+          {item}
+        </div>
       ))}
     </div>
   );

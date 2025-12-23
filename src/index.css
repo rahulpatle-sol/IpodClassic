@@ -1,1 +1,74 @@
 @import "tailwindcss";
+.ipod-classic {
+  @apply bg-neutral-200 text-black;
+}
+
+.ipod-dark {
+  @apply bg-black text-white;
+}
+
+.ipod-modern {
+  @apply bg-gradient-to-b from-neutral-900 to-neutral-700 text-white;
+}
+
+
+@keyframes goldShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ipod-gold {
+  background: linear-gradient(
+    120deg,
+    #3a2c00,
+    #bfa14a,
+    #ffd700,
+    #bfa14a,
+    #3a2c00
+  );
+  background-size: 300% 300%;
+  animation: goldShift 10s ease-in-out infinite;
+}
+
+@keyframes metalFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.ipod-body {
+  background: linear-gradient(
+    135deg,
+    #0f0f0f,
+    #e1c8c8,
+    #cfcfcf,
+    #c8c8c8,
+    #31e5df
+  );
+  background-size: 300% 300%;
+  animation: metalFlow 12s ease infinite;
+}
+
+.metal-wheel {
+  background: radial-gradient(
+    circle at top,
+    #f5f5f5,
+    #bdbdbd,
+    #8a8a8a
+  );
+}
+
+.metal-wheel-inner {
+  background: radial-gradient(
+    circle at top,
+    #1e1e1e,
+    #000
+  );
+}

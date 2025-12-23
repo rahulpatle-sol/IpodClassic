@@ -1,65 +1,57 @@
-//  audio  logic
+import { useRef, useState, useEffect } from "react";
 
+export default function usePlayer(songs = []) {
+  const audioRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-import { useEffect, useRef, useState } from "react";
+  const play = async (index = currentIndex) => {
+    if (!songs[index] || !audioRef.current) return;
 
-export default function usePlayer() {
-  const audioRef = useRef(new Audio());
+    setCurrentIndex(index);
+    setIsPlaying(true);
+  };
 
-  const [currentSong, setCurrentSong] = useState(null);
-  const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const pause = () => {
+    if (!audioRef.current) return;
+    audioRef.current.pause();
+    setIsPlaying(false);
+  };
 
+  const toggle = () => {
+    isPlaying ? pause() : play();
+  };
+
+  const next = () => {
+    play((currentIndex + 1) % songs.length);
+  };
+
+  const prev = () => {
+    play((currentIndex - 1 + songs.length) % songs.length);
+  };
+
+  // 🔥 ACTUAL AUDIO CONTROL
   useEffect(() => {
-    const audio = audioRef.current;
+    if (!audioRef.current) return;
 
-    const onTime = () => setCurrentTime(audio.currentTime);
-    const onLoaded = () => setDuration(audio.duration || 0);
-    const onEnded = () => setPlaying(false);
+    audioRef.current.src = songs[currentIndex]?.url || "";
 
-    audio.addEventListener("timeupdate", onTime);
-    audio.addEventListener("loadedmetadata", onLoaded);
-    audio.addEventListener("ended", onEnded);
-
-    return () => {
-      audio.removeEventListener("timeupdate", onTime);
-      audio.removeEventListener("loadedmetadata", onLoaded);
-      audio.removeEventListener("ended", onEnded);
-    };
-  }, []);
-
-  const playSong = (song) => {
-    const audio = audioRef.current;
-    audio.src = song.url;
-    audio.play();
-    setCurrentSong(song);
-    setPlaying(true);
-  };
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
-    } else {
-      audio.play();
-      setPlaying(true);
+    if (isPlaying) {
+      audioRef.current
+        .play()
+        .catch((err) => console.warn("Play blocked:", err));
     }
-  };
-
-  const seek = (time) => {
-    audioRef.current.currentTime = time;
-    setCurrentTime(time);
-  };
+  }, [currentIndex, isPlaying, songs]);
 
   return {
-    currentSong,
-    playing,
-    currentTime,
-    duration,
-    playSong,
-    togglePlay,
-    seek,
+    audioRef,
+    currentIndex,
+    isPlaying,
+    play,
+    pause,
+    toggle,
+    next,
+    prev,
+    currentSong: songs[currentIndex],
   };
 }

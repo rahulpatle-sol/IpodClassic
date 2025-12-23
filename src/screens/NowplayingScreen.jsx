@@ -1,33 +1,13 @@
-import ProgressBar from "../components/common/ProgressBar";
-
-export default function NowPlayingScreen({
-  song,
-  currentTime,
-  duration,
-  playing,
-}) {
-  if (!song) {
-    return (
-      <div className="flex items-center justify-center h-full text-xs">
-        No Song Playing
-      </div>
-    );
-  }
+export default function NowPlayingScreen({ song, isPlaying }) {
+  if (!song) return null;
 
   return (
-    <div className="p-2 text-sm flex flex-col gap-2">
-      <div className="font-semibold truncate">{song.title}</div>
-      <div className="text-xs truncate">{song.artist}</div>
+    <div className="h-full flex flex-col items-center justify-center text-center px-4">
+      <div className="text-sm font-semibold">{song.title}</div>
+      <div className="text-xs text-neutral-600">{song.artist}</div>
 
-      <ProgressBar current={currentTime} total={duration} />
-
-      <div className="text-xs flex justify-between">
-        <span>{Math.floor(currentTime)}s</span>
-        <span>{Math.floor(duration)}s</span>
-      </div>
-
-      <div className="text-xs">
-        {playing ? "▶ Playing" : "❚❚ Paused"}
+      <div className="mt-4 text-lg">
+        {isPlaying ? "▶ Playing" : "❚❚ Paused"}
       </div>
     </div>
   );
