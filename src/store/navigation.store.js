@@ -1,32 +1,34 @@
-import { useState } from "react";
+import { create } from "zustand";
 
-export default function useNavigation(menuItems) {
-  const [screen, setScreen] = useState("locked");
-  const [activeIndex, setActiveIndex] = useState(0);
+export const useNavigation = create((set, get) => ({
+  stack: ["MENU"],   // history stack
+  selectedIndex: 0,
 
-  const up = () =>
-    setActiveIndex((i) => (i > 0 ? i - 1 : menuItems.length - 1));
+  push: (screen) =>
+    set((state) => ({
+      stack: [...state.stack, screen],
+      selectedIndex: 0,
+    })),
 
-  const down = () =>
-    setActiveIndex((i) => (i + 1) % menuItems.length);
+  pop: () =>
+    set((state) => ({
+      stack: state.stack.length > 1
+        ? state.stack.slice(0, -1)
+        : state.stack,
+      selectedIndex: 0,
+    })),
 
-  const select = () => {
-    if (screen === "home") {
-      setScreen(menuItems[activeIndex].toLowerCase());
-    }
-  };
+  current: () => get().stack[get().stack.length - 1],
 
-  const back = () => {
-    if (screen !== "home") setScreen("home");
-  };
+  moveUp: (max) =>
+    set((s) => ({
+      selectedIndex:
+        (s.selectedIndex - 1 + max) % max,
+    })),
 
-  return {
-    screen,
-    setScreen,
-    activeIndex,
-    up,
-    down,
-    select,
-    back,
-  };
-}
+  moveDown: (max) =>
+    set((s) => ({
+      selectedIndex:
+        (s.selectedIndex + 1) % max,
+    })),
+}));

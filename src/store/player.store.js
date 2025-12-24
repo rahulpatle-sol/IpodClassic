@@ -1,24 +1,24 @@
 import { create } from "zustand";
 
-export const usePlayerStore = create((set) => ({
-  currentSong: null,
+export const usePlayer = create((set) => ({
+  current: null,
   playing: false,
-  currentTime: 0,
-  duration: 0,
+  audio: new Audio(),
 
-  setSong: (song) =>
+  play: (song) => {
+    const audio = new Audio(song.url);
+    audio.play();
+
     set({
-      currentSong: song,
+      current: song,
       playing: true,
-      currentTime: 0,
+      audio,
+    });
+  },
+
+  stop: () =>
+    set((s) => {
+      s.audio.pause();
+      return { playing: false };
     }),
-
-  setPlaying: (value) =>
-    set({ playing: value }),
-
-  setTime: (time) =>
-    set({ currentTime: time }),
-
-  setDuration: (duration) =>
-    set({ duration }),
 }));

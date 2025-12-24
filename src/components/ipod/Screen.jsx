@@ -8,7 +8,7 @@ export default function Screen({ nav, player, songs }) {
   switch (nav.screen) {
     case "locked":
       return <LockScreen />;
-
+ 
     case "home":
       return <HomeScreen nav={nav} />;
 
