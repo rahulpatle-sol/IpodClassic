@@ -1,4 +1,4 @@
-const HOME_ITEMS = [
+const items= [
   "Music",
   "Photos",
   "Settings",
@@ -6,7 +6,7 @@ const HOME_ITEMS = [
 ];
 
 export default function HomeScreen({ nav }) {
-  const items = ["Music"];
+  // const items = ["Music"];
 
   return (
     <div className="p-2">

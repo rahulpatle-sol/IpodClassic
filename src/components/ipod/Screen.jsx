@@ -4,6 +4,7 @@ import MenuScreen from "../../screens/MenuScreen";
 import AllSongsScreen from "../../screens/AllSongScreen";
 import NowPlayingScreen from "../../screens/NowplayingScreen";
 import SearchScreen from "../../screens/SearchScreen";
+import PlaylistScreen from "../../screens/PlaylistScreen";
 
 export default function Screen({ nav, songs, loading, player, search }) {
   switch (nav.screen) {
@@ -36,7 +37,13 @@ export default function Screen({ nav, songs, loading, player, search }) {
           activeIndex={nav.activeIndex}
         />
       );
-
+case "playlist":
+      return (
+        <PlaylistScreen
+          player={player}
+          activeIndex={nav.activeIndex}
+        />
+      );
     case "now":
       return <NowPlayingScreen player={player} />;
 

@@ -59,16 +59,15 @@ export default function IpodShell() {
           if (nav.activeIndex === 1) nav.push("search");
           break;
 
-     case "search":
-  if (search.results.length === 0) {
-    search.search();
-  } else {
-    player.setPlaylist(search.results);
-    player.play(nav.activeIndex);
-    nav.push("now");
-  }
-  break;
-
+        case "search":
+          if (search.results.length === 0) {
+            search.search();
+          } else {
+            player.setPlaylist(search.results);
+            player.play(nav.activeIndex);
+            nav.push("now");
+          }
+          break;
 
         case "allsongs":
           player.play(nav.activeIndex);

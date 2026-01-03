@@ -1,24 +1,42 @@
-export default function PlaylistScreen({ playlists, activeIndex }) {
-  if (!playlists.length) {
-    return (
-      <div className="h-full flex items-center justify-center text-sm text-gray-400">
-        No Playlists
-      </div>
-    );
-  }
-
+export default function PlaylistScreen({
+  title = "Playlist",
+  songs = [],
+  activeIndex = 0,
+}) {
   return (
-    <div className="p-2">
-      {playlists.map((p, i) => (
-        <div
-          key={p.id}
-          className={`p-2 ${
-            i === activeIndex ? "bg-black text-white" : ""
-          }`}
+    <div className="h-full bg-neutral-100 flex flex-col">
+      {/* HEADER */}
+      <div className="px-2 py-1 text-xs font-semibold border-b border-neutral-300">
+        {title}
+      </div>
+
+      {/* LIST WINDOW */}
+      <div className="relative flex-1 overflow-hidden">
+        <ul
+          className="absolute w-full transition-transform duration-150"
+          style={{
+            transform: `translateY(${96 - activeIndex * 32}px)`,
+          }}
         >
-          {p.name}
-        </div>
-      ))}
+          {songs.map((song, i) => (
+            <li
+              key={song.id || i}
+              className={`
+                px-3 py-1
+                text-sm
+                truncate
+                ${
+                  i === activeIndex
+                    ? "bg-black text-white"
+                    : "text-black"
+                }
+              `}
+            >
+              {song.title}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -1,75 +1,37 @@
-import { useEffect, useRef } from "react";
-
 export default function SearchScreen({ search, activeIndex }) {
-  const inputRef = useRef(null);
   const results = search.results || [];
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
   return (
-    <div className="h-full p-2 flex flex-col bg-neutral-100">
-      {/* SEARCH INPUT */}
-      <div className="mb-2">
-        <input
-          ref={inputRef}
-          type="text"
-          value={search.query}
-          onChange={(e) => search.setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") search.search();
-          }}
-          placeholder="Search artist or song"
-          className="
-            w-full
-            px-2 py-1
-            text-sm
-            border border-neutral-400
-            rounded
-            bg-white
-            outline-none
-            focus:border-black
-          "
-        />
-      </div>
+    <div className="h-full flex flex-col bg-neutral-100 p-2">
+      <input
+        value={search.query}
+        onChange={(e) => search.setQuery(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && search.search()}
+        placeholder="Search song / artist"
+        className="mb-2 px-2 py-1 text-sm rounded border"
+      />
 
-      {/* LOADING */}
-      {search.loading && (
-        <div className="text-xs text-gray-500 mb-1">
-          Searching...
-        </div>
-      )}
-
-      {/* RESULTS WINDOW */}
-      <div className="relative flex-1 overflow-hidden bg-white border border-neutral-300 rounded">
-        {results.length === 0 && !search.loading && (
-          <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
-            Type name & press Enter
-          </div>
-        )}
-
+      <div className="flex-1 overflow-hidden relative">
         <ul
-          className="absolute w-full transition-transform duration-150"
+          className="absolute w-full transition-transform duration-200"
           style={{
-            transform: `translateY(${96 - activeIndex * 32}px)`,
+            transform: `translateY(${60 - activeIndex * 36}px)`
           }}
         >
-          {results.map((song, i) => (
+          {results.map((item, i) => (
             <li
-              key={song.id}
-              className={`
-                px-3 py-1
-                text-sm
-                truncate
-                ${
-                  i === activeIndex
-                    ? "bg-black text-white"
-                    : "text-black"
-                }
-              `}
+              key={item.id}
+              className={`flex items-center gap-2 px-2 py-2 rounded ${
+                i === activeIndex ? "bg-black text-white" : ""
+              }`}
             >
-              {song.title}
+              <img
+                src={item.image?.[0]?.url}
+                className="w-8 h-8 rounded"
+              />
+              <div className="text-sm truncate">
+                {item.title}
+              </div>
             </li>
           ))}
         </ul>
