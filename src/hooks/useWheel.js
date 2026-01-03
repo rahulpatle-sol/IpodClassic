@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { playSound } from "../utils/sound";
 import clickSound from "../assets/sounds/click.mp3";
-import wheelSound from "../assets/sounds/wheel.mp3";
+import wheelSound from "../assets/sounds/click.mp3";
 
 export default function useWheel({
   onUp,

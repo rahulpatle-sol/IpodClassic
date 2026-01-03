@@ -1,29 +1,47 @@
+import { useEffect, useState } from "react";
 import Screen from "./Screen";
 import ClickWheel from "./ClickWheel";
 import useNavigation from "../../hooks/useNavigation";
 import useWheel from "../../hooks/useWheel";
 import usePlayer from "../../hooks/usePlayer";
-import { openSourceSongs } from "../../data/openSourceSongs";
+import { fetchSaavnSongs } from "../../services/musicApi";
+import useSearch from "../../hooks/useSearch";
 
 export default function IpodShell() {
-  const nav = useNavigation(); // manages screen + activeIndex
-  const player = usePlayer(openSourceSongs);
+  const nav = useNavigation();
+  const search = useSearch();
+
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSaavnSongs("arijit").then((res) => {
+      setSongs(res);
+      setLoading(false);
+    });
+  }, []);
+
+  const player = usePlayer(songs);
 
   const wheel = useWheel({
     onUp: () => {
       const len =
         nav.screen === "allsongs"
-          ? openSourceSongs.length
+          ? songs.length
+          : nav.screen === "search"
+          ? search.results.length
           : 4;
-      nav.up(len);
+      nav.up(len || 1);
     },
 
     onDown: () => {
       const len =
         nav.screen === "allsongs"
-          ? openSourceSongs.length
+          ? songs.length
+          : nav.screen === "search"
+          ? search.results.length
           : 4;
-      nav.down(len);
+      nav.down(len || 1);
     },
 
     onSelect: () => {
@@ -37,27 +55,31 @@ export default function IpodShell() {
           break;
 
         case "music":
-          if (nav.activeIndex === 0) {
-            nav.push("allsongs");
-          }
+          if (nav.activeIndex === 0) nav.push("allsongs");
+          if (nav.activeIndex === 1) nav.push("search");
           break;
+
+     case "search":
+  if (search.results.length === 0) {
+    search.search();
+  } else {
+    player.setPlaylist(search.results);
+    player.play(nav.activeIndex);
+    nav.push("now");
+  }
+  break;
+
 
         case "allsongs":
           player.play(nav.activeIndex);
           nav.push("now");
           break;
-
-        default:
-          break;
       }
     },
 
     onBack: () => {
-      if (nav.screen === "home") {
-        nav.setScreen("locked");
-      } else {
-        nav.back();
-      }
+      if (nav.screen === "home") nav.setScreen("locked");
+      else nav.back();
     },
 
     onNext: player.next,
@@ -66,14 +88,13 @@ export default function IpodShell() {
 
   return (
     <div className="w-80 h-[520px] bg-neutral-200 rounded-3xl p-4 flex flex-col shadow-2xl">
-      {/* SCREEN */}
       <Screen
         nav={nav}
+        songs={songs}
+        loading={loading}
         player={player}
-        songs={openSourceSongs}
+        search={search}
       />
-
-      {/* CLICK WHEEL */}
       <ClickWheel wheel={wheel} />
     </div>
   );

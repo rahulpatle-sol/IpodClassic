@@ -6,19 +6,16 @@ const HOME_ITEMS = [
 ];
 
 export default function HomeScreen({ nav }) {
-  return (
-    <div className="bg-black text-white h-full p-3">
-      <div className="text-xs opacity-60 mb-2">iPod</div>
+  const items = ["Music"];
 
-      {HOME_ITEMS.map((item, i) => (
+  return (
+    <div className="p-2">
+      {items.map((item, i) => (
         <div
           key={item}
-          className={`px-3 py-2 rounded-md mb-1 text-sm
-            ${
-              i === nav.activeIndex
-                ? "bg-blue-500 text-white"
-                : "text-gray-300"
-            }`}
+          className={`p-2 rounded ${
+            i === nav.activeIndex ? "bg-blue-600 text-white" : ""
+          }`}
         >
           {item}
         </div>
@@ -26,3 +23,4 @@ export default function HomeScreen({ nav }) {
     </div>
   );
 }
+

@@ -6,6 +6,7 @@ const MUSIC_MENU = [
 ];
 
 export default function MusicMenuScreen({ nav }) {
+  console.log({ nav });
   return (
     <div className="bg-neutral-100 h-full p-2">
       {MUSIC_MENU.map((item, i) => (

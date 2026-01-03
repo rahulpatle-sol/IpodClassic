@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function LockScreen() {
+  console.log("LockScreen render");
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {

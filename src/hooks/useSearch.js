@@ -1,23 +1,25 @@
-//  serch  logic  
+import { useState } from "react";
+import { fetchSaavnSongs } from "../services/musicApi";
 
-
-import { useMemo, useState } from "react";
-
-export default function useSearch(songs = []) {
+export default function useSearch() {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const results = useMemo(() => {
-    if (!query) return songs;
-    return songs.filter(
-      (s) =>
-        s.title.toLowerCase().includes(query.toLowerCase()) ||
-        s.artist?.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [query, songs]);
+  async function search() {
+    if (!query.trim()) return;
+
+    setLoading(true);
+    const songs = await fetchSaavnSongs(query);
+    setResults(songs);
+    setLoading(false);
+  }
 
   return {
     query,
     setQuery,
     results,
+    loading,
+    search,
   };
 }

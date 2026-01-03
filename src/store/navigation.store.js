@@ -1,34 +1,36 @@
-import { create } from "zustand";
+import { useState } from "react";
 
-export const useNavigation = create((set, get) => ({
-  stack: ["MENU"],   // history stack
-  selectedIndex: 0,
+export default function useNavigation() {
+  const [stack, setStack] = useState(["locked"]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  push: (screen) =>
-    set((state) => ({
-      stack: [...state.stack, screen],
-      selectedIndex: 0,
-    })),
+  const screen = stack[stack.length - 1];
 
-  pop: () =>
-    set((state) => ({
-      stack: state.stack.length > 1
-        ? state.stack.slice(0, -1)
-        : state.stack,
-      selectedIndex: 0,
-    })),
+  return {
+    screen,
+    activeIndex,
 
-  current: () => get().stack[get().stack.length - 1],
+    setScreen(s) {
+      setStack([s]);
+      setActiveIndex(0);
+    },
 
-  moveUp: (max) =>
-    set((s) => ({
-      selectedIndex:
-        (s.selectedIndex - 1 + max) % max,
-    })),
+    push(s) {
+      setStack((prev) => [...prev, s]);
+      setActiveIndex(0);
+    },
 
-  moveDown: (max) =>
-    set((s) => ({
-      selectedIndex:
-        (s.selectedIndex + 1) % max,
-    })),
-}));
+    back() {
+      setStack((prev) => prev.slice(0, -1));
+      setActiveIndex(0);
+    },
+
+    up(len) {
+      setActiveIndex((i) => (i - 1 + len) % len);
+    },
+
+    down(len) {
+      setActiveIndex((i) => (i + 1) % len);
+    },
+  };
+}   

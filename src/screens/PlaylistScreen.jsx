@@ -1,20 +1,23 @@
-import ListItem from "../components/ipod/ListItem";
+export default function PlaylistScreen({ playlists, activeIndex }) {
+  if (!playlists.length) {
+    return (
+      <div className="h-full flex items-center justify-center text-sm text-gray-400">
+        No Playlists
+      </div>
+    );
+  }
 
-export default function PlaylistScreen({ playlists = [] }) {
   return (
-    <div className="p-1">
-      {playlists.length === 0 && (
-        <div className="text-xs text-center mt-8">
-          No Playlists
+    <div className="p-2">
+      {playlists.map((p, i) => (
+        <div
+          key={p.id}
+          className={`p-2 ${
+            i === activeIndex ? "bg-black text-white" : ""
+          }`}
+        >
+          {p.name}
         </div>
-      )}
-
-      {playlists.map((pl, index) => (
-        <ListItem
-          key={pl.id}
-          text={pl.name}
-          selected={index === 0}
-        />
       ))}
     </div>
   );
